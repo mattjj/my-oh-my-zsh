@@ -44,14 +44,10 @@ for path_file in /etc/manpaths.d/*(.N); do
 done
 
 path=(
-  /opt/local/bin
-  /opt/local/sbin
-  /usr/local/bin
-  /usr/local/sbin
-  /usr/bin
-  /bin
-  /usr/sbin
-  /sbin
+  /opt/local/{,s}bin
+  /usr/local/{,s}bin
+  /usr/{,s}bin
+  /{,s}bin
   /opt/local/Library/Frameworks/Python.framework/Versions/Current/bin
 )
 
@@ -60,14 +56,9 @@ for path_file in /etc/paths.d/*(.N); do
 done
 
 # Language
-export LANG="en_AU.UTF-8"
-export LC_ALL="$LANG"
-export LC_COLLATE="$LANG"
-export LC_CTYPE="$LANG"
-export LC_MESSAGES="$LANG"
-export LC_MONETARY="$LANG"
-export LC_NUMERIC="$LANG"
-export LC_TIME="$LANG"
+if [[ -z "$LANG" ]]; then
+  eval "$(locale)"
+fi
 
 # Editors
 export EDITOR="vim"
