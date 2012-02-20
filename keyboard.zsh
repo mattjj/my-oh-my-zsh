@@ -172,8 +172,8 @@ elif [[ "$keymap" == vi ]]; then
   fi
 
   # Switch to command mode.
-  bindkey -M viins "jk" vi-cmd-mode
-  bindkey -M viins "kj" vi-cmd-mode
+  # bindkey -M viins "jk" vi-cmd-mode
+  # bindkey -M viins "kj" vi-cmd-mode
 
   # Emacs key bindings in insert mode.
   [[ -n "$keyinfo[Control]" ]] && \

@@ -30,15 +30,11 @@ cdpath=(
 )
 
 infopath=(
-  $HOME/.tilde/share/info
-  $HOME/.tilde/opt/share/info
   /usr/local/share/info
   /usr/share/info
 )
 
 manpath=(
-  $HOME/.tilde/share/man
-  $HOME/.tilde/opt/share/man
   /usr/local/share/man
   /usr/share/man
 )
@@ -48,14 +44,15 @@ for path_file in /etc/manpaths.d/*(.N); do
 done
 
 path=(
-  $HOME/.tilde/bin
-  $HOME/.tilde/opt/bin
+  /opt/local/bin
+  /opt/local/sbin
   /usr/local/bin
   /usr/local/sbin
   /usr/bin
   /bin
   /usr/sbin
   /sbin
+  /opt/local/Library/Frameworks/Python.framework/Versions/Current/bin
 )
 
 for path_file in /etc/paths.d/*(.N); do
@@ -74,7 +71,7 @@ export LC_TIME="$LANG"
 
 # Editors
 export EDITOR="vim"
-export VISUAL="vim"
+export VISUAL="mvim"
 export PAGER='less'
 
 # Grep
@@ -113,3 +110,199 @@ if zstyle -t ':omz:environment:termcap' color; then
   export LESS_TERMCAP_us=$'\E[01;32m'      # begin underline
 fi
 
+# Misc
+alias pl='ipython --pylab'
+alias plg='ipython qtconsole --pylab=qt'
+alias pli='ipython qtconsole --pylab=inline'
+alias pln='ipython notebook --pylab inline'
+alias plk='ipython kernel'
+alias plc='ipython console --existing'
+alias gvim='mvim'
+alias gv='mvim'
+alias v='vim'
+alias vv='vim -u NONE'
+
+alias -s py=vim
+
+alias matlab='/Applications/MATLAB_R2011b.app/bin/matlab -nodesktop -nosplash'
+
+alias top='htop'
+
+function mdown() # {{{
+{
+    (echo '
+        <head>
+            <style>
+                body {
+                    font-family: Georgia;
+                    font-size: 17px;
+                    line-height: 24px;
+                    color: #222;
+                    text-rendering: optimizeLegibility;
+                    width: 670px;
+                    margin: 20px auto;
+                    padding-bottom: 80px;
+                }
+                h1, h2, h3, h4, h5, h6 {
+                    font-weight: normal;
+                    margin-top: 48px;
+                }
+                h1 { font-size: 48px; }
+                h2 {
+                    font-size: 36px;
+                    border-bottom: 6px solid #ddd;
+                    padding: 0 0 6px 0;
+                }
+                h3 {
+                    font-size: 24px;
+                    border-bottom: 6px solid #eee;
+                    padding: 0 0 2px 0;
+                }
+                h4 { font-size: 20px; }
+                pre {
+                    background-color: #f5f5f5;
+                    font: normal 15px Menlo;
+                    line-height: 24px;
+                    padding: 8px 10px;
+                    overflow-x: scroll;
+                }
+            </style>
+        </head>
+    '; markdown $@)
+}# }}}
+
+function cl() # {{{
+{
+    if [ $# = 0 ]; then
+        \cd && ls -G
+    else
+        \cd "$*" && ls -G
+    fi
+} # }}}
+
+function findgrep() # {{{
+{
+    find . -iname "$1" -exec grep -Hn "$2" {} \;
+} # }}}
+
+function redecho # {{{
+{
+    echo -n "\033[1;31m"
+    echo "$@"
+    echo -n "\033[m"
+} # }}}
+
+### todo setup # {{{
+export TODOFILE=~/.todo
+export DONEFILE=~/.todone
+export TODOHISTORY=~/.todo-history
+
+function show_todo { cat $TODOFILE | gawk '{print NR". " $0}' }
+
+function todo
+{
+    if [ $# -ne 0 ]
+    then
+        echo "$@" >> $TODOFILE
+        (echo -n "+ " && echo "$*▸  $(date)") >> $TODOHISTORY
+    fi
+    show_todo
+}
+
+# TODO factor out match checking into its own function so that it's not
+# repeated between todone and toskip
+function todone
+{
+    if [[ "$*" =~ ^[0-9]+$ ]]
+    then
+        gsed -i "$1d" $TODOFILE
+    elif [ -n "$*" ]
+    then
+        NUM_MATCHES=$(gsed -n "/$*/p" $TODOFILE | wc -l)
+        if [ $NUM_MATCHES -eq 0 ]
+        then
+            redecho "!! no matches !!"
+        elif [ $NUM_MATCHES -gt 1 ]
+        then
+            redecho "!! multiple matches !!"
+            grep --color=always "$*" $TODOFILE | gawk '{print NR". " $0}'
+            return
+        else
+            gsed -n "/$*/s/.*/- \0▸ $(date)/p" $TODOFILE >> $TODOHISTORY
+            gsed -n "/$*/p" $TODOFILE >> $DONEFILE
+            gsed -i "/$*/d" $TODOFILE
+        fi
+    fi
+    show_todo
+}
+
+function toskip
+{
+    if [[ "$*" =~ ^[0-9]+$ ]]
+    then
+        MATCH=$(gsed -n "$1p" $TODOFILE)
+        if [ $(gsed -n "/$MATCH/p" $TODOHISTORY | wc -l) -gt 1 ]
+        then
+            redecho "!! multiple matches in history; revise manually !!"
+        else
+            gsed -i "/$MATCH/d" $TODOHISTORY
+        fi
+        gsed -i "/$*/d" $TODOFILE
+    elif [ -n "$*" ]
+    then
+        NUM_MATCHES=$(gsed -n "/$*/p" $TODOFILE | wc -l)
+        if [ $NUM_MATCHES -eq 0 ]
+        then
+            redecho "!! no matches !!"
+        elif [ $NUM_MATCHES -gt 1 ]
+        then
+            redecho "!! multiple matches !!"
+            grep --color=always "$*" $TODOFILE | gawk '{print NR". " $0}'
+            return
+        else
+            MATCH=$(gsed -n "/$*/p" $TODOFILE)
+            if [ $(gsed -n "/$MATCH/p" $TODOHISTORY | wc -l) -gt 1 ]
+            then
+                redecho "!! multiple matches in history; revise manually !!"
+            else
+                gsed -i "/$MATCH/d" $TODOHISTORY
+            fi
+            gsed -i "/$*/d" $TODOFILE
+        fi
+    fi
+    show_todo
+}
+
+function prune_donelist
+{
+    IFS=$'\n'
+    DAYAGOFILE="/tmp/donelist_dayago"
+    TESTFILE="/tmp/donelist_testtime"
+
+    rm $DONEFILE
+
+    gtouch -d "-1day" $DAYAGOFILE
+    for l in $(tail -n 25 ~/.todo-history | grep '^-')
+    do
+        gtouch -d "$(echo $l | cut -f2)" $TESTFILE
+        if [ $TESTFILE -nt $DAYAGOFILE ]
+        then
+            echo "$l" | cut -f1 | gsed 's/^- //' >> $DONEFILE
+        fi
+    done
+}
+
+export PROJECTFILE=~/Documents/unsorted\ notes/projects.txt
+function proj
+{
+    if [[ "$*" =~ ^[0-9]+$ ]]
+    then
+        gsed -i -e "s/^==>\(.*\)<==$/\1/" -e "$*s/\(.*\)/==>\1<==/" $PROJECTFILE
+    elif [ -n "$*" ]
+    then
+        gsed -i -e "s/^==>\(.*\)<==$/\1/" -e "s/\(.*$*.*\)/==>\1<==/" $PROJECTFILE
+    fi
+    cat $PROJECTFILE | gawk '{print NR". " $0}'
+}
+
+alias ejectcd='drutil tray eject'
