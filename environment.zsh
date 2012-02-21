@@ -35,6 +35,7 @@ infopath=(
 )
 
 manpath=(
+  /opt/local/share/man
   /usr/local/share/man
   /usr/share/man
 )
@@ -46,6 +47,7 @@ done
 path=(
   /opt/local/{,s}bin
   /usr/local/{,s}bin
+  ~/bin
   /usr/{,s}bin
   /{,s}bin
   /opt/local/Library/Frameworks/Python.framework/Versions/Current/bin
@@ -62,7 +64,7 @@ fi
 
 # Editors
 export EDITOR="vim"
-export VISUAL="mvim"
+export VISUAL="vim"
 export PAGER='less'
 
 # Grep
