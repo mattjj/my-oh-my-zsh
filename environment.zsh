@@ -185,6 +185,9 @@ function redecho # {{{
     echo -n "\033[m"
 } # }}}
 
+# TODO this is only for my main laptop... i should keep these lines local to
+# that instance of the repo
+
 ### todo setup # {{{
 export TODOFILE=~/.todo
 export DONEFILE=~/.todone
