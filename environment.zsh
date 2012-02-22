@@ -221,7 +221,7 @@ function todone
             grep --color=always "$*" $TODOFILE | gawk '{print NR". " $0}'
             return
         else
-            gsed -n "/$*/s/.*/- \0▸ $(date)/p" $TODOFILE >> $TODOHISTORY
+            gsed -n "/$*/s/.*/- \0	$(date)/p" $TODOFILE >> $TODOHISTORY
             gsed -n "/$*/p" $TODOFILE >> $DONEFILE
             gsed -i "/$*/d" $TODOFILE
         fi
@@ -280,7 +280,7 @@ function prune_donelist
         gtouch -d "$(echo $l | cut -f2)" $TESTFILE
         if [ $TESTFILE -nt $DAYAGOFILE ]
         then
-            echo "$l" | cut -f1 | gsed 's/^- //' >> $DONEFILE
+            echo "$l" | cut -f1 | gsed 's/^- //' >>! $DONEFILE
         fi
     done
 }

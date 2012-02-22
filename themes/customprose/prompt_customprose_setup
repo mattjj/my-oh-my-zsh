@@ -54,8 +54,15 @@ function prompt_customprose_setup() {
 
   zstyle ':omz:prompt' vicmd '%F{red}<<<%f'
 
+  if [[ $(locale charmap) != UTF* ]]
+  then
+      PROMPTCHAR='$'
+  else
+      PROMPTCHAR='○'
+  fi
+
   PROMPT='%F{blue}%n%f at %F{yellow}%m%f in %F{green}%~%f${git_prompt_info}
-%(!.#.○) '
+%(!.#.'$PROMPTCHAR') '
   RPROMPT=''
   SPROMPT='zsh: correct %F{red}%R%f to %F{green}%r%f [nyae]? '
 }
