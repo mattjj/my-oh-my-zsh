@@ -110,14 +110,18 @@ alias pli='ipython qtconsole --pylab=inline'
 alias pln='ipython notebook --pylab inline'
 alias plk='ipython kernel'
 alias plc='ipython console --existing'
-alias gvim='mvim'
-alias gv='mvim'
+if [[ $OSTYPE == darwin* ]]
+then
+    alias gvim='mvim'
+    alias gv='mvim'
+    alias matlab='/Applications/MATLAB_R2011b.app/bin/matlab -nodesktop -nosplash'
+else
+    alias gv='gvim'
+fi
 alias v='vim'
 alias vv='vim -u NONE'
 
 alias -s py=vim
-
-alias matlab='/Applications/MATLAB_R2011b.app/bin/matlab -nodesktop -nosplash'
 
 alias top='htop'
 
