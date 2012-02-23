@@ -12,6 +12,9 @@ if zstyle -t ':omz:alias:ls' color; then
   if [[ -f "$HOME/.dir_colors" ]] && (( $+commands[dircolors] )); then
     eval $(dircolors "$HOME/.dir_colors")
     alias ls='ls -hF --group-directories-first --color=auto'
+  elif [[ -f "$HOME/.dir_colors" ]] && (( $+commands[gdircolors] )) && (( $+commands[gls] )); then
+    eval $(gdircolors "$HOME/.dir_colors")
+    alias ls='\gls -hF --group-directories-first --color=auto'
   else
     export CLICOLOR=1
     export LSCOLORS="exfxcxdxbxegedabagacad"
