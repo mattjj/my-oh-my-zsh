@@ -35,7 +35,6 @@ infopath=(
 )
 
 manpath=(
-  /opt/local/share/man
   /usr/local/share/man
   /usr/share/man
 )
@@ -45,7 +44,7 @@ for path_file in /etc/manpaths.d/*(.N); do
 done
 
 path=(
-  /opt/local/{,s}bin
+  /usr/local/epd-7.2.2/bin
   /usr/local/{,s}bin
   ~/bin
   /usr/{,s}bin
@@ -117,7 +116,7 @@ alias vv='vim -u NONE'
 
 alias -s py=vim
 
-alias matlab='/Applications/MATLAB_R2011b.app/bin/matlab -nodesktop -nosplash'
+alias matlab='cd ~matlab && sudo -u matlab /home/matlab/MATLAB/R2011b/bin/matlab -nodesktop -nosplash'
 
 alias top='htop'
 
