@@ -196,7 +196,7 @@ function todo
     if [ $# -ne 0 ]
     then
         echo "$@" >> $TODOFILE
-        (echo -n "+ " && echo "$*▸  $(date)") >> $TODOHISTORY
+        (echo -n "+ " && echo "$*	$(date)") >> $TODOHISTORY
     fi
     show_todo
 }
@@ -217,7 +217,7 @@ function todone
         elif [ $NUM_MATCHES -gt 1 ]
         then
             redecho "!! multiple matches !!"
-            grep --color=always "$*" $TODOFILE | gawk '{print NR". " $0}'
+            cat $TODOFILE | gawk '{print NR". " $0}' | grep --color=none -E "^[0-9]+\. .*$*" | grep --color=always "$*"
             return
         else
             gsed -n "/$*/s/.*/- \0	$(date)/p" $TODOFILE >> $TODOHISTORY
@@ -232,7 +232,7 @@ function toskip
 {
     if [[ "$*" =~ ^[0-9]+$ ]]
     then
-        MATCH=$(gsed -n "$1p" $TODOFILE)
+        MATCH=$(gsed -n "${1}p" $TODOFILE)
         if [ $(gsed -n "/$MATCH/p" $TODOHISTORY | wc -l) -gt 1 ]
         then
             redecho "!! multiple matches in history; revise manually !!"
