@@ -169,15 +169,6 @@ function mdown() # {{{
     '; markdown $@)
 }# }}}
 
-function cl() # {{{
-{
-    if [ $# = 0 ]; then
-        \cd && ls -G
-    else
-        \cd "$*" && ls -G
-    fi
-} # }}}
-
 function findgrep() # {{{
 {
     find . -iname "$1" -exec grep -Hn "$2" {} \;

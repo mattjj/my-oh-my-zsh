@@ -22,6 +22,8 @@ if zstyle -t ':omz:alias:ls' color; then
   fi
 fi
 
+alias cl='if [ $# = 0 ]; then \cd && ls; else \cd "$*" && ls; fi'
+
 alias l='ls -1A'             # Show files in one column.
 alias ll='ls -lh'            # Show human readable.
 alias la='ls -lhA'           # Show hidden files.
