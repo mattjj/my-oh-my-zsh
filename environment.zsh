@@ -204,7 +204,7 @@ function todo
     if [ $# -ne 0 ]
     then
         echo "$@" >> $TODOFILE
-        (echo -n "+ " && echo "$*▸  $(date)") >> $TODOHISTORY
+        (echo -n "+ " && echo "$*	$(date)") >> $TODOHISTORY
     fi
     show_todo
 }
@@ -240,7 +240,7 @@ function toskip
 {
     if [[ "$*" =~ ^[0-9]+$ ]]
     then
-        MATCH=$(gsed -n "$1p" $TODOFILE)
+        MATCH=$(gsed -n "${1}p" $TODOFILE)
         if [ $(gsed -n "/$MATCH/p" $TODOHISTORY | wc -l) -gt 1 ]
         then
             redecho "!! multiple matches in history; revise manually !!"
