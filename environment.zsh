@@ -225,7 +225,7 @@ function todone
         elif [ $NUM_MATCHES -gt 1 ]
         then
             redecho "!! multiple matches !!"
-            cat $TODOFILE | gawk '{print NR". " $0}' | grep --color=none -E "[0-9]+\. .*$*" | grep --color=always "$*"
+            cat $TODOFILE | gawk '{print NR". " $0}' | grep --color=none -E "^[0-9]+\. .*$*" | grep --color=always "$*"
             return
         else
             gsed -n "/$*/s/.*/- \0	$(date)/p" $TODOFILE >> $TODOHISTORY
