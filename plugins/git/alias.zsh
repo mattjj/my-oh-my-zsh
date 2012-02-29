@@ -118,8 +118,8 @@ git_log_format_brief='--pretty=format:%C(green)%h%C(reset) %s%n%C(blue)(%ar by %
 
 alias gl='git log --topo-order ${git_log_format_medium}'
 compdef _git gl=git-log
-alias gls='git log --topo-order --stat ${git_log_format_medium}'
-compdef _git gls=git-log
+# alias gls='git log --topo-order --stat ${git_log_format_medium}'
+# compdef _git gls=git-log
 alias gld='git log --topo-order --stat --patch --full-diff ${git_log_format_medium}'
 compdef _git gld=git-log
 alias glo='git log --topo-order ${git_log_format_oneline}'
