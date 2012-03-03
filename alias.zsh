@@ -22,6 +22,7 @@ fi
 alias zcp='noglob zmv -C'
 alias zln='noglob zmv -L'
 alias zmv='noglob zmv'
+alias cl='if [ $# = 0 ]; then \cd && ls; else \cd "$*" && ls; fi'
 
 alias l='ls -1A'             # Show files in one column.
 alias ll='ls -lh'            # Show human readable.

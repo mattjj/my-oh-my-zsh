@@ -124,6 +124,12 @@ alias gv='gvim'
 alias v='vim'
 alias vv='vim -u NONE'
 
+alias -s py=vim
+
+alias matlab='cd ~matlab && sudo -u matlab /home/matlab/MATLAB/R2011b/bin/matlab -nodesktop -nosplash'
+
+alias top='htop'
+
 function mdown() # {{{
 {
     (echo '
@@ -166,15 +172,6 @@ function mdown() # {{{
         </head>
     '; markdown $@)
 }# }}}
-
-function cl() # {{{
-{
-    if [ $# = 0 ]; then
-        \cd && ls -G
-    else
-        \cd "$*" && ls -G
-    fi
-} # }}}
 
 function findgrep() # {{{
 {
