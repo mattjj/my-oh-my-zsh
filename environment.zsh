@@ -26,7 +26,6 @@ typeset -U cdpath fpath infopath manpath path
 
 cdpath=(
   $HOME
-  $HOME/Developer
 )
 
 infopath=(
@@ -123,8 +122,6 @@ alias plc='ipython console --existing'
 alias gv='gvim'
 alias v='vim'
 alias vv='vim -u NONE'
-
-alias -s py=vim
 
 alias matlab='cd ~matlab && sudo -u matlab /home/matlab/MATLAB/R2011b/bin/matlab -nodesktop -nosplash'
 
