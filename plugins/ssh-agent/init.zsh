@@ -15,26 +15,35 @@
 #
 #     zstyle ':omz:plugin:ssh-agent' forwarding 'yes'
 #
-#   To load multiple identies, add the following to your .zshrc:
+#   To load multiple identities, add the following to your .zshrc:
 #
 #     zstyle ':omz:plugin:ssh-agent' identities 'id_rsa' 'id_rsa2' 'id_github'
 #
 
-_ssh_agent_env="$HOME/.ssh/environment-$HOST"
+if (( ! $+commands[ssh-agent] )); then
+  return
+fi
+
+_ssh_agent_env="${HOME}/.ssh/environment-${HOST}"
 _ssh_agent_forwarding=
 
 function _ssh-agent-start() {
   local -a identities
 
   # Start ssh-agent and setup the environment.
-  /usr/bin/env ssh-agent | sed 's/^print/#print/' > "${_ssh_agent_env}"
+  rm -f "${_ssh_agent_env}"
+  ssh-agent > "${_ssh_agent_env}"
   chmod 600 "${_ssh_agent_env}"
   source "${_ssh_agent_env}" > /dev/null
 
-  # Load identies.
+  # Load identities.
   zstyle -a ':omz:plugin:ssh-agent' identities 'identities'
-  print starting...
-  /usr/bin/ssh-add "$HOME/.ssh/${^identities}"
+
+  if (( ${#identities} > 0 )); then
+    ssh-add "${HOME}/.ssh/${^identities[@]}"
+  else
+    ssh-add
+  fi
 }
 
 # Test if agent-forwarding is enabled.
@@ -45,7 +54,7 @@ if is-true "${_ssh_agent_forwarding}" && [[ -n "$SSH_AUTH_SOCK" ]]; then
 elif [ -f "${_ssh_agent_env}" ]; then
   # Source SSH settings, if applicable.
   source "${_ssh_agent_env}" > /dev/null
-  ps -ef | grep "${SSH_AGENT_PID}" | grep ssh-agent$ > /dev/null || {
+  ps -ef | grep "${SSH_AGENT_PID}" | grep -q 'ssh-agent$' || {
     _ssh-agent-start;
   }
 else

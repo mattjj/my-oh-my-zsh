@@ -89,24 +89,15 @@ zmodload -F zsh/parameter
 #
 if [[ $+functions[_zsh_highlight] -eq 0 ]]; then
   #
-  # Dummy implementation of _zsh_highlight()
-  # that simply removes existing highlights
+  # Dummy implementation of _zsh_highlight() that
+  # simply removes any existing highlights when the
+  # user inserts printable characters into $BUFFER.
   #
   function _zsh_highlight() {
-    region_highlight=()
-  }
-
-  #
-  # Remove existing highlights when the user
-  # inserts printable characters into $BUFFER
-  #
-  function ordinary-key-press() {
     if [[ $KEYS == [[:print:]] ]]; then
       region_highlight=()
     fi
-    zle .self-insert
   }
-  zle -N self-insert ordinary-key-press
 
   #
   # The following snippet was taken from the zsh-syntax-highlighting project:

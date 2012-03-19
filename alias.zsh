@@ -5,17 +5,28 @@
 #   Sorin Ionescu <sorin.ionescu@gmail.com>
 #
 
-setopt CORRECT               # Correct commands.
+setopt CORRECT # Correct commands.
 
 # The 'ls' Family
-if zstyle -t ':omz:alias:ls' color; then
-  if [[ -f "$HOME/.dir_colors" ]] && (( $+commands[dircolors] )); then
-    eval $(dircolors "$HOME/.dir_colors")
-    alias ls='ls -hFX --group-directories-first --color=auto'
+if (( $+commands[dircolors] )); then
+  # GNU core utilities.
+  alias ls='ls -hX --group-directories-first'
+
+  if zstyle -t ':omz:alias:ls' color; then
+    if [[ -f "$HOME/.dir_colors" ]]; then
+      eval $(dircolors "$HOME/.dir_colors")
+    fi
+    alias ls="$aliases[ls] --color=auto"
   else
-    export CLICOLOR=1
+    alias ls="$aliases[ls] -F"
+  fi
+else
+  # BSD core utilities.
+  if zstyle -t ':omz:alias:ls' color; then
     export LSCOLORS="exfxcxdxbxegedabagacad"
-    alias ls='ls -G -F'
+    alias ls="ls -G"
+  else
+    alias ls='ls -F'
   fi
 fi
 
@@ -62,8 +73,11 @@ alias scp='nocorrect scp'
 alias type='type -a'
 
 # Mac OS X
-if [[ "$OSTYPE" != darwin* ]]; then
-  alias open='xdg-open'
+if [[ "$OSTYPE" == darwin* ]]; then
+  alias o='open'
+  alias get='curl --continue-at - --location --progress-bar --remote-name'
+else
+  alias o='xdg-open'
   alias get='wget --continue --progress=bar'
 
   if (( $+commands[xclip] )); then
@@ -75,11 +89,8 @@ if [[ "$OSTYPE" != darwin* ]]; then
     alias pbcopy='xsel --clipboard --input'
     alias pbpaste='xsel --clipboard --output'
   fi
-else
-  alias get='curl --continue-at - --location --progress-bar --remote-name'
 fi
 
-alias o='open'
 alias pbc='pbcopy'
 alias pbp='pbpaste'
 
