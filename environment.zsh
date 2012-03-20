@@ -133,7 +133,7 @@ alias matlab='cd ~matlab && sudo -u matlab /home/matlab/MATLAB/R2011b/bin/matlab
 
 alias top='htop'
 
-function mdown() # {{{
+function mdown()
 {
     (echo '
         <head>
@@ -174,7 +174,7 @@ function mdown() # {{{
             </style>
         </head>
     '; markdown $@)
-}# }}}
+}
 
 function findgrep() # {{{
 {

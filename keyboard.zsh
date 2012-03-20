@@ -188,10 +188,6 @@ bindkey -M vicmd "u" undo
 [[ -n "$keyinfo[Control]" ]] && \
   bindkey -M vicmd "$keyinfo[Control]R" redo
 
-# Switch to command mode.
-bindkey -M viins "jk" vi-cmd-mode
-bindkey -M viins "kj" vi-cmd-mode
-
 # History
 bindkey -M vicmd "gg" beginning-of-history
 bindkey -M vicmd "G" end-of-history
@@ -226,8 +222,7 @@ for keymap in 'emacs' 'viins'; do
   [[ -n "$keyinfo[Delete]" ]] && \
     bindkey -M "$keymap" "$keyinfo[Delete]" delete-char
   [[ -n "$keyinfo[Backspace]" ]] && \
-    bindkey -M "$keymap" "$keyinfo[Backspace]" backward-delete-char && \
-    stty erase "$keyinfo[Backspace]"
+    bindkey -M "$keymap" "$keyinfo[Backspace]" backward-delete-char
 
   [[ -n "$keyinfo[Left]" ]] && \
     bindkey -M "$keymap" "$keyinfo[Left]" backward-char
