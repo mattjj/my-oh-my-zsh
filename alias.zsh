@@ -138,7 +138,7 @@ if zstyle -t ':omz:alias:diff' color; then
 fi
 
 # Miscellaneous
-(( $+commands[ack] )) && alias afind='nocorrect ack'
+(( $+commands[ack] )) && alias afind='nocorrect ack -g'
 (( $+commands[ebuild] )) && alias ebuild='nocorrect ebuild'
 (( $+commands[gist] )) && alias gist='nocorrect gist'
 (( $+commands[heroku] )) && alias heroku='nocorrect heroku'
