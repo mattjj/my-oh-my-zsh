@@ -113,8 +113,9 @@ alias gkT='gkt $(gkl)'
 
 # Log (l)
 git_log_format_medium='--pretty=format:%C(bold)Commit:%C(reset) %C(green)%H%C(red)%d%n%C(bold)Author:%C(reset) %C(cyan)%an <%ae>%n%C(bold)Date:%C(reset)   %C(blue)%ai (%ar)%C(reset)%n%+B'
-git_log_format_oneline='--pretty=format:%C(green)%h%C(reset) %s%n'
+git_log_format_oneline='--pretty=format:%C(yellow)%h%Cred%d %Creset%s%Cblue [%cn]'
 git_log_format_brief='--pretty=format:%C(green)%h%C(reset) %s%n%C(blue)(%ar by %an)%C(red)%d%C(reset)%n'
+git_log_format_longer='--pretty=format:%C(yellow)%h%Cred%d %Creset%s%Cblue [%cn]'
 
 alias gl='git log --topo-order ${git_log_format_medium}'
 compdef _git gl=git-log
@@ -130,6 +131,10 @@ alias glb='git log --topo-order ${git_log_format_brief}'
 compdef _git glb=git-log
 alias glc='git shortlog --summary --numbered'
 compdef _git glc=git-shortlog
+alias gll='git log --topo-order --decorate --numstat ${git_log_format_longer}'
+compdef _git gll=git-log
+alias gfl='git log -u'
+compdef _git gll=git-log
 
 # Merge (m)
 alias gm='git merge'
